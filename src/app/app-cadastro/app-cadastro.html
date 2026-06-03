@@ -1,0 +1,24 @@
+<div class="form-container">
+  <h2>Call the technician.</h2>
+  <form (ngSubmit)="save()">
+    <label>Name:</label><br>
+    <input type="text" name="name" [(ngModel)]="name"><br><br>
+
+    <label>Email:</label><br>
+    <input type="email" name="email" [(ngModel)]="email"><br><br>
+
+    <label>complaints.:</label><br>
+    <select name="complaint" [(ngModel)]="subject">
+      <option value="">Select a subject</option>
+      <option value="broken computer">Broken Computer</option>
+      <option value="slow email">Slow Email</option>
+      <option value="broken coffee machine">Broken Coffee Machine</option>
+      <option value="slow internet">Slow Internet</option>
+    </select><br><br>
+
+    <button type="submit">Only he can save me.</button>
+  </form>
+
+  <br>
+  <button routerLink="/users" class="btn-nav">See the complaints. →</button>
+</div>

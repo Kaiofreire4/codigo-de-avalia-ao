@@ -1,0 +1,15 @@
+.form-container {
+   max-width: 300px;
+   padding: 20px;
+    font-family: Arial; }
+input, select {
+  width: 100%;
+   padding: 8px ;
+   display:flex;
+   justify-content: center;}
+.btn-nav {
+   background: none;
+    border: none;
+     color: blue;
+      cursor: pointer;
+      text-decoration: underline; }
