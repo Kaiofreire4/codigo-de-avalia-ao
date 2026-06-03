@@ -13,6 +13,8 @@ import { UserService } from '../user.service';
 export class AppCadastro {
   name: string = '';
   email: string = '';
+  phone: number = 0;
+  password: number = 0;
   subject: string = '';
 
 
@@ -26,10 +28,13 @@ export class AppCadastro {
     }
 
 
-    this.userService.addUser({
+   this.userService.addUser({
       name: this.name,
       email: this.email,
-      subject: this.subject
+      password: this.password,
+      phone: this.phone,
+      subject: this.subject,
+      role: 'user'
     });
 
     alert('User registered successfully!');

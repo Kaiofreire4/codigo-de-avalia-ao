@@ -1,7 +1,8 @@
 import { Component, inject } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { MatTableModule } from '@angular/material/table';
-import { UserService } from '../user.service';
+import { UserService, User } from '../user.service'; // <-- Importando o User daqui
+
 
 @Component({
   selector: 'app-usuarios',
@@ -13,7 +14,7 @@ import { UserService } from '../user.service';
 export class AppUsuarios {
   private userService = inject(UserService);
 
-  displayedColumns: string[] = ['name', 'email', 'subject'];
+  displayedColumns: string[] = ['name', 'email', 'phone', 'password', 'subject'];
 
 
   dataSource = this.userService.getUsers();
