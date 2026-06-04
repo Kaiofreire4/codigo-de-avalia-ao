@@ -1,1 +1,22 @@
-<p>app-login works!</p>
+<div class="login-container">
+  <div class="login-card">
+    <h2>Technician Login 🔒</h2>
+    <p class="subtitle">Enter your credentials to access the dashboard</p>
+
+    <div class="input-group">
+      <label>Email</label>
+      <input type="email" [(ngModel)]="email" placeholder="tech@support.com">
+    </div>
+
+    <div class="input-group">
+      <label>Password</label>
+      <input type="password" [(ngModel)]="password" placeholder="••••••••" (keyup.enter)="login()">
+    </div>
+
+    <button class="btn-login" (click)="login()">Sign In</button>
+
+    <br>
+    <button routerLink="/register" class="btn-back">← Back to Registration</button>
+    <button routerLink="/login" class="btn-nav">Go to Tech Panel 🛠️ →</button>
+  </div>
+</div>
