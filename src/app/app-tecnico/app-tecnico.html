@@ -1,0 +1,65 @@
+<div class="dashboard-layout">
+
+  <div class="table-container">
+    <h3>Technician Control Panel 🛠️</h3>
+    <p class="subtitle">Select a ticket to open the chat sync.</p>
+
+   <table mat-table [dataSource]="dataSource()" class="mat-elevation-z1 user-table">
+
+      <ng-container matColumnDef="name">
+        <th mat-header-cell *matHeaderCellDef> Client </th>
+        <td mat-cell *matCellDef="let element"> {{element.name}} </td>
+      </ng-container>
+
+      <ng-container matColumnDef="subject">
+        <th mat-header-cell *matHeaderCellDef> Complaint </th>
+        <td mat-cell *matCellDef="let element"> {{element.subject}} </td>
+      </ng-container>
+
+      <ng-container matColumnDef="actions">
+        <th mat-header-cell *matHeaderCellDef> Action </th>
+        <td mat-cell *matCellDef="let element">
+          <button class="btn-action" (click)="selectTicket(element)">
+            Open Chat 💬
+          </button>
+        </td>
+      </ng-container>
+
+      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+      <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+    </table>
+
+    <br>
+    <button routerLink="/register" class="btn-nav">← Back to Registration</button>
+  </div>
+
+  <div class="chat-container" *ngIf="selectedTicket">
+    <div class="chat-header">
+      <h4>Chatting with: <strong>{{ selectedTicket.name }}</strong></h4>
+      <p>Issue: {{ selectedTicket.subject }}</p>
+    </div>
+
+    <div class="chat-messages">
+      <div class="message user-message">
+        <span class="sender">{{ selectedTicket.name }}:</span>
+        <p>Hello, I need help with: "{{ selectedTicket.subject }}"</p>
+      </div>
+
+      <div *ngFor="let msg of chatHistory" class="message tech-message">
+        <span class="sender">You (Technician):</span>
+        <p>{{ msg }}</p>
+      </div>
+    </div>
+
+    <div class="chat-input-box">
+      <input
+        #replyInput
+        type="text"
+        placeholder="Type a message..."
+        (keyup.enter)="sendReply(replyInput.value); replyInput.value = ''"
+      >
+      <button (click)="sendReply(replyInput.value); replyInput.value = ''">Send</button>
+    </div>
+  </div>
+
+</div>
