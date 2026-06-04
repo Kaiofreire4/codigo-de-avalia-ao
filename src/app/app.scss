@@ -1,12 +1,13 @@
-
 .toggle-container {
   display: flex;
   align-items: center;
+  justify-content: flex-end;
   gap: 10px;
-  padding: 20px;
-  font-family: Arial, sans-serif;
+  padding: 16px 24px;
+  font-family: Roboto, Arial, sans-serif;
   font-size: 14px;
   font-weight: bold;
+  color: #a8a8b3;
 }
 
 .switch {
@@ -26,21 +27,23 @@
   position: absolute;
   cursor: pointer;
   top: 0; left: 0; right: 0; bottom: 0;
-  background-color: #ccc;
+  background-color: #a8a8b3;
   transition: .4s;
 }
 
 .slider:before {
   position: absolute;
   content: "";
-  height: 18px; width: 18px;
-  left: 4px; bottom: 4px;
+  height: 18px;
+  width: 18px;
+  left: 4px;
+  bottom: 4px;
   background-color: white;
   transition: .4s;
 }
 
 input:checked + .slider {
-  background-color: #2196F3;
+  background-color: #04d361;
 }
 
 input:checked + .slider:before {

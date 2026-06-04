@@ -35,7 +35,7 @@ import { UserService } from '../user.service';
 export class AppTecnicoComponent {
   private userService = inject(UserService);
 
-  dataSource = this.userService.getUsers();
+  dataSource = this.userService.getTickets();
   displayedColumns: string[] = ['name', 'subject', 'actions'];
 
   selectedTicket: any = null;

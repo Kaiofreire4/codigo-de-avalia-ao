@@ -1,29 +1,51 @@
-<div class="form-container">
-  <h2>Call the technician.</h2>
-  <form (ngSubmit)="save()">
-    <label>Name:</label><br>
-    <input type="text" name="name" [(ngModel)]="name"><br><br>
+<div class="register-wrapper">
 
-    <label>Email:</label><br>
-    <input type="email" name="email" [(ngModel)]="email"><br><br>
-    <label>Phone:</label><br>
-    <input type="tel" name="phone" [(ngModel)]="phone"><br><br>
-    <label>Password:</label><br>
-    <input type="password" name="password" [(ngModel)]="password"><br><br>
+  <mat-card class="register-card">
+    <mat-card-header class="register-header">
+      <mat-card-title class="register-title">
+        <mat-icon color="primary">build</mat-icon> Call the technician
+      </mat-card-title>
+      <mat-card-subtitle class="register-subtitle">
+        Fill in the details below to open a support ticket
+      </mat-card-subtitle>
+    </mat-card-header>
 
-    <label>complaints.:</label><br>
-    <select name="complaint" [(ngModel)]="subject">
-      <option value="">Select a subject</option>
-      <option value="broken computer">Broken Computer</option>
-      <option value="slow email">Slow Email</option>
-      <option value="broken coffee machine">Broken Coffee Machine</option>
-      <option value="slow internet">Slow Internet</option>
-    </select><br><br>
+    <mat-card-content class="register-content">
 
-    <button type="submit">Only he can save me.</button>
-  </form>
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label>Name</mat-label>
+        <input matInput [(ngModel)]="name" placeholder="Your name">
+        <mat-icon matSuffix>person</mat-icon>
+      </mat-form-field>
 
-  <br>
-  <button routerLink="/users" class="btn-nav">See the complaints. →</button>
-  <button routerLink="/technician" style="margin-top: 10px;" class="btn-nav">Go to Tech Panel →</button>
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label>Email</mat-label>
+        <input matInput type="email" [(ngModel)]="email" placeholder="your@email.com">
+        <mat-icon matSuffix>email</mat-icon>
+      </mat-form-field>
+
+      <!-- O bloco correto deve usar mat-select e mat-option (nunca a tag option comum) -->
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label>Complaints</mat-label>
+        <mat-select [(ngModel)]="subject">
+          <mat-option value="broken coffee machine">Broken coffee machine ☕</mat-option>
+          <mat-option value="slow internet">Slow internet 🌐</mat-option>
+          <mat-option value="computer won't turn on">Computer won't turn on 💻</mat-option>
+          <mat-option value="other">Other issue...</mat-option>
+        </mat-select>
+      </mat-form-field>
+
+      <button mat-flat-button color="primary" class="btn-submit-ticket" (click)="sendComplaint()">
+        Submit Ticket 🚀
+      </button>
+
+    </mat-card-content>
+
+    <mat-card-actions class="register-actions">
+      <button mat-button routerLink="/users" class="btn-link-view">
+        See the complaints. →
+      </button>
+    </mat-card-actions>
+  </mat-card>
+
 </div>

@@ -6,12 +6,12 @@ import { UserService } from '../user.service';
 import { MatCardModule } from '@angular/material/card';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
-import { MatSelectModule } from '@angular/material/select';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
+import { MatRadioModule } from '@angular/material/radio';
 
 @Component({
-  selector: 'app-app-cadastro',
+  selector: 'app-app-signup',
   standalone: true,
   imports: [
     FormsModule,
@@ -19,35 +19,37 @@ import { MatIconModule } from '@angular/material/icon';
     MatCardModule,
     MatFormFieldModule,
     MatInputModule,
-    MatSelectModule,
     MatButtonModule,
-    MatIconModule
+    MatIconModule,
+    MatRadioModule,
   ],
-  templateUrl: './app-cadastro.html',
-  styleUrl: './app-cadastro.scss'
+  templateUrl: './app-signup.html',
+  styleUrl: './app-signup.scss'
 })
-export class AppCadastro {
+export class AppSignupComponent {
   private userService = inject(UserService);
   private router = inject(Router);
 
   name = '';
   email = '';
-  subject = '';
+  password = '';
+  confirmPassword = '';
+  role: 'user' | 'technician' = 'user';
 
-  sendComplaint() {
-    if (!this.name || !this.email || !this.subject) {
-      alert('Please fill in all fields!');
+  createAccount() {
+    if (!this.name || !this.email || !this.password ) {
+      alert('Please fill in all fields to register!');
       return;
     }
 
-    this.userService.addTicket({
+    this.userService.registerAccount({
       name: this.name,
       email: this.email,
-      subject: this.subject,
-      status: 'open'
+      password: this.password,
+      role: this.role
     });
 
-    alert('Complaint registered successfully!');
-    this.router.navigate(['/users']);
+    alert(`Account created successfully as ${this.role === 'technician' ? 'Technician' : 'User'}!`);
+    this.router.navigate(['/login']);
   }
 }

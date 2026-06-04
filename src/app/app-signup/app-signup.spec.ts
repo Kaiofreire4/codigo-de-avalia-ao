@@ -1,15 +1,15 @@
 import { TestBed } from '@angular/core/testing';
-import { AppTecnicoComponent } from './app-tecnico';
+import { AppSignupComponent } from './app-signup';
 
-describe('AppTecnicoComponent', () => {
+describe('AppSignupComponent', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [AppTecnicoComponent]
+      imports: [AppSignupComponent]
     }).compileComponents();
   });
 
-  it('should create the tecnico component', () => {
-    const fixture = TestBed.createComponent(AppTecnicoComponent);
+  it('should create the signup component', () => {
+    const fixture = TestBed.createComponent(AppSignupComponent);
     const component = fixture.componentInstance;
     expect(component).toBeTruthy();
   });

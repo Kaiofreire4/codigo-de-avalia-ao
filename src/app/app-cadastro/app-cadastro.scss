@@ -1,15 +1,98 @@
-.form-container {
-   max-width: 300px;
-   padding: 20px;
-    font-family: Arial; }
-input, select {
+.register-wrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 80vh;
+  font-family: Roboto, sans-serif;
+  padding: 20px;
+  box-sizing: border-box;
+  background-color: transparent;
+}
+
+.register-card {
   width: 100%;
-   padding: 8px ;
-   display:flex;
-   justify-content: center;}
-.btn-nav {
-   background: none;
-    border: none;
-     color: blue;
-      cursor: pointer;
-      text-decoration: underline; }
+  max-width: 500px;
+  padding: 40px;
+  background-color: #ffffff !important;
+  border: 1px solid #e2e2e6 !important;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05) !important;
+  transition: background-color 0.3s ease, border-color 0.3s ease;
+}
+
+.register-header {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  margin-bottom: 24px;
+}
+
+.register-title {
+  font-size: 24px;
+  font-weight: bold;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.register-subtitle {
+  margin-top: 6px !important;
+  color: #7c7c8a;
+}
+.register-content {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.full-width {
+  width: 100%;
+}
+
+.btn-submit-ticket {
+  padding: 24px !important;
+  font-size: 16px !important;
+  font-weight: bold !important;
+  margin-top: 8px;
+  background-color: #2196F3 !important; /* Azul padrão Material no modo claro */
+  color: #ffffff !important;
+
+  &:hover {
+    background-color: #1e88e5 !important;
+  }
+}
+.register-actions {
+  justify-content: center;
+  margin-top: 16px;
+  padding: 0 !important;
+}
+
+.btn-link-view {
+  color: #7c7c8a !important;
+  &:hover {
+    color: #1c1c1e !important;
+  }
+}
+
+:host-context(body.dark-theme) {
+  .register-card {
+    background-color: #1e1e24 !important;
+    border: 1px solid #29292e !important;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4) !important;
+  }
+
+  .btn-submit-ticket {
+    background-color: #04d361 !important;
+    color: #000000 !important;
+
+    &:hover {
+      background-color: #03b852 !important;
+    }
+  }
+  .btn-link-view {
+    color: #a8a8b3 !important;
+    &:hover {
+      color: #ffffff !important;
+  }
+  }
+}

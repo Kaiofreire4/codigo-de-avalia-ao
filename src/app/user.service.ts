@@ -1,25 +1,44 @@
 import { Injectable, signal } from '@angular/core';
 
-export interface User {
+export interface Account {
   name: string;
   email: string;
-  phone: number;
-  password: number;
-  subject: string;
+  password: string;
   role: 'user' | 'technician';
+}
+
+export interface Ticket {
+  name: string;
+  email: string;
+  subject: string;
+  status: 'open' | 'in-progress' | 'closed';
 }
 
 @Injectable({
   providedIn: 'root'
 })
 export class UserService {
-  private usersSignal = signal<User[]>([]);
 
-  getUsers() {
-    return this.usersSignal;
+  private accountsList = signal<Account[]>([
+
+    { name: 'Tech Master', email: 'admin@tech.com', password: '12345', role: 'technician' }
+  ]);
+
+  private ticketsList = signal<Ticket[]>([]);
+
+  getAccounts() {
+    return this.accountsList;
   }
 
-  addUser(user: User) {
-    this.usersSignal.update(currentUsers => [...currentUsers, user]);
+  registerAccount(account: Account) {
+    this.accountsList.update(current => [...current, account]);
+  }
+
+  getTickets() {
+    return this.ticketsList;
+  }
+
+  addTicket(ticket: Ticket) {
+    this.ticketsList.update(current => [...current, ticket]);
   }
 }

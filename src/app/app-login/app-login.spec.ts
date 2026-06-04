@@ -1,22 +1,16 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { TestBed } from '@angular/core/testing';
+import { AppLoginComponent } from './app-login';
 
-import { AppLogin } from './app-login';
-
-describe('AppLogin', () => {
-  let component: AppLogin;
-  let fixture: ComponentFixture<AppLogin>;
-
+describe('AppLoginComponent', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [AppLogin],
+      imports: [AppLoginComponent]
     }).compileComponents();
-
-    fixture = TestBed.createComponent(AppLogin);
-    component = fixture.componentInstance;
-    await fixture.whenStable();
   });
 
-  it('should create', () => {
+  it('should create the login component', () => {
+    const fixture = TestBed.createComponent(AppLoginComponent);
+    const component = fixture.componentInstance;
     expect(component).toBeTruthy();
   });
 });
