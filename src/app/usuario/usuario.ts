@@ -15,6 +15,5 @@ export class AppUsuarios {
 
  displayedColumns: string[] = ['name', 'email', 'phone', 'password', 'subject'];
 
-
   dataSource = this.userService.getTickets();
 }

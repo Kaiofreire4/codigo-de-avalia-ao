@@ -1,6 +1,6 @@
 <div class="dashboard-layout">
 
-  <!-- CARD DA ESQUERDA: TABELA DE CHAMADOS -->
+
   <mat-card class="tech-card table-card">
     <mat-card-header class="card-header-spacer">
       <mat-card-title class="panel-title">
@@ -12,19 +12,19 @@
     <mat-card-content>
       <table mat-table [dataSource]="dataSource()" class="mat-elevation-z2 dynamic-table">
 
-        <!-- Client Column -->
+
         <ng-container matColumnDef="name">
           <th mat-header-cell *matHeaderCellDef class="text-bold"> Client </th>
           <td mat-cell *matCellDef="let element"> {{element.name}} </td>
         </ng-container>
 
-        <!-- Complaint Column -->
+
         <ng-container matColumnDef="subject">
           <th mat-header-cell *matHeaderCellDef class="text-bold"> Complaint </th>
           <td mat-cell *matCellDef="let element"> {{element.subject}} </td>
         </ng-container>
 
-        <!-- Action Column -->
+
         <ng-container matColumnDef="actions">
           <th mat-header-cell *matHeaderCellDef class="text-bold"> Action </th>
           <td mat-cell *matCellDef="let element">
@@ -46,7 +46,7 @@
     </mat-card-actions>
   </mat-card>
 
-  <!-- CARD DA DIREITA: CHAT COMPLETO -->
+
   <mat-card *ngIf="selectedTicket" class="tech-card chat-window">
 
     <div class="chat-header-bar">
@@ -58,7 +58,7 @@
     </div>
 
     <div class="messages-area">
-      <!-- Balão do Cliente -->
+
       <div class="msg-box client-box">
         <span class="user-label">{{ selectedTicket.name }}</span>
         <div class="bubble">
@@ -66,7 +66,7 @@
         </div>
       </div>
 
-      <!-- Balões do Técnico -->
+
       <div *ngFor="let msg of chatHistory" class="msg-box technician-box">
         <span class="user-label">You (Technician)</span>
         <div class="bubble">
