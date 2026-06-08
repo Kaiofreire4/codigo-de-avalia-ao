@@ -13,10 +13,8 @@ export class UserService {
   private mockJsonUrl = 'mocks/tickets-mock.json';
   private ticketsSignal = signal<any[]>([]);
 
-  // 1. Recriando a lousa mágica de contas que o seu login antigo usava
   private accountsSignal = signal<any[]>([]);
 
-  //
   private chatSignal = signal<ChatMessage[]>([
     { sender: 'client', text: 'Hello, I need help with: slow internet' },
     { sender: 'technician', text: 'Hello! Your request has already been received by our technical team.' },

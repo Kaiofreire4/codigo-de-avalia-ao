@@ -1,9 +1,10 @@
-body {
+html, body {
   background-color: #f5f7fa !important;
   color: #1c1c1e !important;
   transition: background-color 0.3s ease, color 0.3s ease;
   margin: 0;
   font-family: Roboto, Arial, sans-serif;
+  height: 100%;
 }
 
 h2, h3, p, span, label {
@@ -16,11 +17,41 @@ input[type="text"], input[type="email"], select {
   border: 1px solid #cccde2 !important;
 }
 
-body.dark-theme {
+button[mat-flat-button],
+.mat-mdc-flat-button {
+  background-color: #00c853 !important;
+  color: #ffffff !important;
+}
+
+.cdk-overlay-container {
+  z-index: 9999 !important;
+}
+
+.cdk-overlay-pane .mat-mdc-select-panel {
+  background-color: #ffffff !important;
+  background: #ffffff !important;
+}
+
+.mat-mdc-option {
+  background-color: #ffffff !important;
+  color: #1c1c1e !important;
+
+  .mdc-list-item__primary-text {
+    color: #1c1c1e !important;
+  }
+
+  &:hover, &.mat-mdc-option-active {
+    background-color: #f0f2f5 !important;
+  }
+}
+
+html:has(.dark-theme),
+body.dark-theme,
+.dark-theme {
   background-color: #121214 !important;
   color: #ffffff !important;
 
-  h2, h3, p, span, label {
+  h2, h3, p, span, label, .mat-mdc-radio-button {
     color: #f5f5f5 !important;
   }
 
@@ -34,5 +65,37 @@ body.dark-theme {
     background-color: #1e1e24 !important;
     color: #ffffff !important;
     border: 1px solid #29292e !important;
+  }
+
+  button[mat-flat-button],
+  .mat-mdc-flat-button {
+    background-color: #00c853 !important;
+    color: #ffffff !important;
+  }
+}
+
+html:has(.dark-theme) .cdk-overlay-pane .mat-mdc-select-panel,
+body.dark-theme ~ .cdk-overlay-container .mat-mdc-select-panel,
+body.dark-theme .cdk-overlay-container .mat-mdc-select-panel,
+.dark-theme .cdk-overlay-container .mat-mdc-select-panel,
+.cdk-overlay-container .dark-theme .mat-mdc-select-panel {
+  background-color: #1e1e24 !important;
+  background: #1e1e24 !important;
+}
+
+html:has(.dark-theme) .mat-mdc-option,
+body.dark-theme ~ .cdk-overlay-container .mat-mdc-option,
+body.dark-theme .cdk-overlay-container .mat-mdc-option,
+.dark-theme .cdk-overlay-container .mat-mdc-option {
+  background-color: #1e1e24 !important;
+  background: #1e1e24 !important;
+  color: #ffffff !important;
+
+  .mdc-list-item__primary-text {
+    color: #ffffff !important;
+  }
+
+  &:hover, &.mat-mdc-option-active {
+    background-color: #29292e !important;
   }
 }
