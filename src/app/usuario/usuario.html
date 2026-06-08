@@ -1,37 +1,73 @@
-<div class="table-container">
-  <h3>Registered Complaints 📋</h3>
+<div class="dashboard-layout">
 
-  <table mat-table [dataSource]="dataSource()" class="mat-elevation-z1 user-table">
 
-    <ng-container matColumnDef="name">
-      <th mat-header-cell *matHeaderCellDef> Name </th>
-      <td mat-cell *matCellDef="let element"> {{element.name}} </td>
-    </ng-container>
+  <div class="table-container tech-card table-card" style="padding: 24px;">
+    <h3>Registered Complaints 📋</h3>
 
-    <ng-container matColumnDef="email">
-      <th mat-header-cell *matHeaderCellDef> Email </th>
-      <td mat-cell *matCellDef="let element"> {{element.email}} </td>
-    </ng-container>
+    <table mat-table [dataSource]="dataSource()" class="mat-elevation-z1 user-table dynamic-table">
+      <ng-container matColumnDef="name">
+        <th mat-header-cell *matHeaderCellDef> Name </th>
+        <td mat-cell *matCellDef="let element"> {{element.name}} </td>
+      </ng-container>
 
-    <ng-container matColumnDef="phone">
-      <th mat-header-cell *matHeaderCellDef> Phone </th>
-      <td mat-cell *matCellDef="let element"> {{element.phone}} </td>
-    </ng-container>
+      <ng-container matColumnDef="email">
+        <th mat-header-cell *matHeaderCellDef> Email </th>
+        <td mat-cell *matCellDef="let element"> {{element.email}} </td>
+      </ng-container>
 
-    <ng-container matColumnDef="password">
-      <th mat-header-cell *matHeaderCellDef> Password </th>
-      <td mat-cell *matCellDef="let element"> {{element.password}} </td>
-    </ng-container>
-    <ng-container matColumnDef="subject">
-      <th mat-header-cell *matHeaderCellDef> Complaint </th>
-      <td mat-cell *matCellDef="let element"> {{element.subject}} </td>
-    </ng-container>
+      <ng-container matColumnDef="subject">
+        <th mat-header-cell *matHeaderCellDef> Complaint </th>
+        <td mat-cell *matCellDef="let element"> {{element.subject}} </td>
+      </ng-container>
 
-    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-    <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
-  </table>
+      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+      <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+    </table>
 
-  <br><br>
-  <button routerLink="/register" class="btn-nav">← Complain again</button>
-  <button routerLink="/login" class="btn-nav">Go to Tech Panel 🛠️ →</button>
+    <br><br>
+    <div style="display: flex; gap: 12px;">
+      <button mat-stroked-button routerLink="/register" class="btn-nav">← Complain again</button>
+      <button mat-flat-button color="primary" routerLink="/login" class="btn-nav">Go to Tech Panel 🛠️ →</button>
+    </div>
+  </div>
+
+
+  <div class="tech-card chat-window" *ngIf="dataSource().length > 0">
+
+    <div class="chat-header-bar">
+      <div>
+        <h3 class="chat-title">Support Chat 💬</h3>
+        <p class="chat-subtitle">Connected with IT Support Technician</p>
+      </div>
+    </div>
+
+    <div class="messages-area">
+
+      <div *ngFor="let msg of chatMessages()" class="msg-box"
+           [ngClass]="{'technician-box': msg.sender === 'client', 'client-box': msg.sender === 'technician'}">
+
+        <span class="user-label">
+          {{ msg.sender === 'client' ? 'You' : 'Support Technician' }}
+        </span>
+
+        <div class="bubble">
+          <p>{{ msg.text }}</p>
+        </div>
+      </div>
+    </div>
+
+
+    <div class="input-container-bar">
+      <mat-form-field appearance="outline" class="chat-input-field">
+        <mat-label>Type your reply to the technician...</mat-label>
+        <input matInput #clientReplyInput (keyup.enter)="sendReply(clientReplyInput.value); clientReplyInput.value = ''">
+      </mat-form-field>
+
+      <button mat-mini-fab color="primary" (click)="sendReply(clientReplyInput.value); clientReplyInput.value = ''">
+        <mat-icon>send</mat-icon>
+      </button>
+    </div>
+
+  </div>
+
 </div>

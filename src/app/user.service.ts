@@ -1,37 +1,71 @@
 import { Injectable, signal } from '@angular/core';
-export interface Account {
-  name: string;
-  email: string;
-  password: string;
-  role: 'user' | 'technician';
+import { HttpClient } from '@angular/common/http';
+
+export interface ChatMessage {
+  sender: 'client' | 'technician';
+  text: string;
 }
-export interface Ticket {
-  name: string;
-  email: string;
-  subject: string;
-  status: 'open' | 'in-progress' | 'closed';
-}
+
 @Injectable({
   providedIn: 'root'
 })
 export class UserService {
+  private mockJsonUrl = 'mocks/tickets-mock.json';
+  private ticketsSignal = signal<any[]>([]);
 
-  private accountsList = signal<Account[]>([
+  // 1. Recriando a lousa mágica de contas que o seu login antigo usava
+  private accountsSignal = signal<any[]>([]);
 
-    { name: 'Tech Master', email: 'admin@tech.com', password: '12345', role: 'technician' }
+  //
+  private chatSignal = signal<ChatMessage[]>([
+    { sender: 'client', text: 'Hello, I need help with: slow internet' },
+    { sender: 'technician', text: 'Hello! Your request has already been received by our technical team.' },
+    { sender: 'technician', text: 'A support analyst is currently investigating the slowness on your network. Please wait..' }
   ]);
 
-  private ticketsList = signal<Ticket[]>([]);
-  getAccounts() {
-    return this.accountsList;
+  constructor(private http: HttpClient) {
+    this.loadInitialTickets();
+    this.loadInitialAccounts();
   }
-  registerAccount(account: Account) {
-    this.accountsList.update(current => [...current, account]);
+  private loadInitialTickets() {
+    this.http.get<any[]>(this.mockJsonUrl).subscribe({
+      next: (data) => {
+        this.ticketsSignal.set(data);
+      },
+      error: (err) => console.error('Erro ao carregar mock de tickets:', err)
+    });
   }
+  private loadInitialAccounts() {
+    this.http.get<any[]>(this.mockJsonUrl).subscribe({
+      next: (data) => this.accountsSignal.set(data),
+      error: (err) => console.error('Erro ao carregar contas:', err)
+    });
+  }
+
   getTickets() {
-    return this.ticketsList;
+    return this.ticketsSignal;
   }
-  addTicket(ticket: Ticket) {
-    this.ticketsList.update(current => [...current, ticket]);
+  addTicket(newTicket: any) {
+    const currentTickets = this.ticketsSignal();
+    this.ticketsSignal.set([newTicket, ...currentTickets]);
+  }
+  getAccounts() {
+    return this.accountsSignal;
+  }
+  registerAccount(newAccount: any) {
+    const currentAccounts = this.accountsSignal();
+    this.accountsSignal.set([...currentAccounts, newAccount]);
+
+
+    this.addTicket(newAccount);
+  }
+
+  getChatMessages() {
+    return this.chatSignal;
+  }
+
+  sendMessage(sender: 'client' | 'technician', text: string) {
+    const currentMessages = this.chatSignal();
+    this.chatSignal.set([...currentMessages, { sender, text }]);
   }
 }

@@ -12,18 +12,15 @@
     <mat-card-content>
       <table mat-table [dataSource]="dataSource()" class="mat-elevation-z2 dynamic-table">
 
-
         <ng-container matColumnDef="name">
           <th mat-header-cell *matHeaderCellDef class="text-bold"> Client </th>
           <td mat-cell *matCellDef="let element"> {{element.name}} </td>
         </ng-container>
 
-
         <ng-container matColumnDef="subject">
           <th mat-header-cell *matHeaderCellDef class="text-bold"> Complaint </th>
           <td mat-cell *matCellDef="let element"> {{element.subject}} </td>
         </ng-container>
-
 
         <ng-container matColumnDef="actions">
           <th mat-header-cell *matHeaderCellDef class="text-bold"> Action </th>
@@ -46,12 +43,11 @@
     </mat-card-actions>
   </mat-card>
 
-
   <mat-card *ngIf="selectedTicket" class="tech-card chat-window">
 
     <div class="chat-header-bar">
       <div>
-        <h3 class="chat-title">Chatting with: {{ selectedTicket.name }}</h3>
+        <h3 class="chat-title">Chatting with: {{ selectedTicket.name }} 💬</h3>
         <p class="chat-subtitle">Issue: {{ selectedTicket.subject }}</p>
       </div>
       <mat-icon [matBadge]="unreadCount" matBadgeColor="warn" [matBadgeHidden]="unreadCount === 0">forum</mat-icon>
@@ -59,21 +55,19 @@
 
     <div class="messages-area">
 
-      <div class="msg-box client-box">
-        <span class="user-label">{{ selectedTicket.name }}</span>
-        <div class="bubble">
-          <p>Hello, I need help with: "{{ selectedTicket.subject }}"</p>
-        </div>
-      </div>
+      <div *ngFor="let msg of chatMessages()" class="msg-box"
+           [ngClass]="{'technician-box': msg.sender === 'technician', 'client-box': msg.sender === 'client'}">
 
+        <span class="user-label">
+          {{ msg.sender === 'technician' ? 'You (Technician)' : selectedTicket.name }}
+        </span>
 
-      <div *ngFor="let msg of chatHistory" class="msg-box technician-box">
-        <span class="user-label">You (Technician)</span>
         <div class="bubble">
-          <p>{{ msg }}</p>
+          <p>{{ msg.text }}</p>
         </div>
       </div>
     </div>
+
 
     <div class="input-container-bar">
       <mat-form-field appearance="outline" class="chat-input-field">
