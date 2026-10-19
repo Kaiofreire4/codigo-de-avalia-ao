@@ -1,24 +1,13 @@
 import { Component } from '@angular/core';
-import { RouterOutlet } from '@angular/router';
+import { RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
+import { MatIconModule } from '@angular/material/icon';
 
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [RouterOutlet],
+  imports: [RouterOutlet, RouterLink, RouterLinkActive, MatIconModule],
   templateUrl: './app.html',
   styleUrl: './app.scss'
 })
 export class App {
-  title = 'teste';
-  isDarkMode: boolean = false;
-
-  toggleTheme() {
-    this.isDarkMode = !this.isDarkMode;
-
-    if (this.isDarkMode) {
-      document.body.classList.add('dark-theme');
-    } else {
-      document.body.classList.remove('dark-theme');
-    }
-  }
 }

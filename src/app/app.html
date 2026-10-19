@@ -1,12 +1,9 @@
-<div class="theme-wrapper">
-  <div class="toggle-container">
-    <span>Light Mode</span>
-    <label class="switch">
-      <input type="checkbox" (change)="toggleTheme()">
-      <span class="slider round"></span>
-    </label>
-    <span>Dark Mode</span>
-  </div>
-
-  <router-outlet></router-outlet>
-</div>
+<header class="topbar">
+  <a class="brand" routerLink="/technician" aria-label="Chamado — início"><span class="brand-mark"><mat-icon>handyman</mat-icon></span><span>chamado<span class="brand-period">.</span><small>SUPORTE TÉCNICO</small></span></a>
+  <nav class="main-nav" aria-label="Navegação principal">
+    <a routerLink="/technician" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }"><mat-icon>space_dashboard</mat-icon>Painel técnico</a>
+    <a routerLink="/users" routerLinkActive="active"><mat-icon>confirmation_number</mat-icon>Meus chamados</a>
+  </nav>
+  <div class="topbar-actions"><a class="login-link" routerLink="/login">Entrar</a><a class="signup-link" routerLink="/signup">Criar conta</a></div>
+</header>
+<router-outlet></router-outlet>

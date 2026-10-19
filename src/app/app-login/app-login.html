@@ -1,24 +1,14 @@
-<div class="login-container">
-  <div class="login-card">
-    <h2>Technician Login 🔒</h2>
-    <p class="subtitle">Enter your credentials to access the dashboard</p>
-
-    <div class="input-group">
-      <label>Email</label>
-      <input type="email" [(ngModel)]="email" placeholder="tech@support.com">
-    </div>
-
-    <div class="input-group">
-      <label>Password</label>
-      <input type="password" [(ngModel)]="password" placeholder="••••••••" (keyup.enter)="login()">
-    </div>
-
-    <button class="btn-login" (click)="login()">Sign In</button>
-
-    <div class="login-actions-group">
-      <button routerLink="/register">← Back to Registration</button>
-      <button routerLink="/signup">Don't have an account? Sign Up 🚀</button>
-    </div>
-
-  </div>
-</div>
+<main class="login-container">
+  <form class="login-card" (ngSubmit)="login()">
+    <span class="auth-mark"><mat-icon>handyman</mat-icon></span>
+    <span class="auth-eyebrow">BOM TER VOCÊ DE VOLTA</span>
+    <h1>Acesse sua conta</h1>
+    <p class="subtitle">Entre para acompanhar seus chamados e conversas.</p>
+    <div class="input-group"><label for="email">E-mail</label><input id="email" type="email" name="email" [(ngModel)]="email" placeholder="voce@exemplo.com" autocomplete="email" required></div>
+    <div class="input-group"><label for="password">Senha</label><input id="password" type="password" name="password" [(ngModel)]="password" placeholder="Sua senha" autocomplete="current-password" required></div>
+    <p class="form-error" *ngIf="errorMessage" role="alert">{{ errorMessage }}</p>
+    <button class="btn-login" type="submit">Entrar na plataforma <mat-icon>arrow_forward</mat-icon></button>
+    <div class="demo-hint"><strong>Acesso de demonstração</strong><span>Técnico: tecnico&#64;chamados.com · tecnico123</span><span>Cliente: cliente&#64;chamados.com · cliente123</span></div>
+    <div class="login-actions-group"><span>Não tem uma conta?</span><a routerLink="/signup">Criar uma conta grátis</a><a routerLink="/technician">Continuar sem entrar</a></div>
+  </form>
+</main>

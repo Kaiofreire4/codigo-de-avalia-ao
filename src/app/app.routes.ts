@@ -11,5 +11,6 @@ export const routes: Routes = [
   { path: 'register', component: AppCadastro },
   { path: 'users', component: AppUsuarios },
   { path: 'technician', component: AppTecnicoComponent },
-  { path: '', redirectTo: '/login', pathMatch: 'full' }
+  { path: '', redirectTo: '/technician', pathMatch: 'full' },
+  { path: '**', redirectTo: '/technician' }
 ];

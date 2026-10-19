@@ -1,101 +1,20 @@
-html, body {
-  background-color: #f5f7fa !important;
-  color: #1c1c1e !important;
-  transition: background-color 0.3s ease, color 0.3s ease;
-  margin: 0;
-  font-family: Roboto, Arial, sans-serif;
-  height: 100%;
-}
+* { box-sizing: border-box; }
+html, body { min-height: 100%; margin: 0; background: #13121d; color: #f3f2fc; font-family: 'DM Sans', Roboto, Arial, sans-serif; }
+body { min-width: 320px; }
+button, input, select, textarea { font: inherit; }
+button:focus-visible, a:focus-visible, input:focus-visible { outline: 2px solid #a398ff; outline-offset: 2px; }
+::selection { background: #6458b6; color: white; }
+.cdk-overlay-container { z-index: 9999; }
 
-h2, h3, p, span, label {
-  color: #1c1c1e;
-}
+/* Keep Angular Material screens in the same dark visual language as the workspace. */
+.mat-mdc-card { border: 1px solid #2a293c !important; border-radius: 15px !important; background: #191826 !important; color: #f3f2fc !important; }
+.mat-mdc-card-title, .mat-mdc-card-subtitle, .mat-mdc-form-field label, .mat-mdc-form-field .mdc-floating-label, .mat-mdc-radio-button .mdc-label { color: #e5e3f1 !important; }
+.mat-mdc-form-field .mdc-text-field--outlined .mdc-notched-outline__leading, .mat-mdc-form-field .mdc-text-field--outlined .mdc-notched-outline__notch, .mat-mdc-form-field .mdc-text-field--outlined .mdc-notched-outline__trailing { border-color: #403e54 !important; }
+.mat-mdc-form-field input, .mat-mdc-form-field .mat-mdc-select-value { color: #f3f2fc !important; }
+.mat-mdc-form-field input::placeholder { color: #86849a !important; }
+.mat-mdc-form-field .mat-mdc-select-arrow { color: #aaa7bd !important; }
+.mat-mdc-raised-button.mat-primary, .mat-mdc-unelevated-button.mat-primary { background: #8174e8 !important; color: white !important; }
+.mat-mdc-option { background: #201f30 !important; color: #f3f2fc !important; }
+.mat-mdc-option:hover, .mat-mdc-option.mdc-list-item--selected { background: #302b48 !important; }
 
-input[type="text"], input[type="email"], select {
-  background-color: #ffffff !important;
-  color: #1c1c1e !important;
-  border: 1px solid #cccde2 !important;
-}
-
-button[mat-flat-button],
-.mat-mdc-flat-button {
-  background-color: #00c853 !important;
-  color: #ffffff !important;
-}
-
-.cdk-overlay-container {
-  z-index: 9999 !important;
-}
-
-.cdk-overlay-pane .mat-mdc-select-panel {
-  background-color: #ffffff !important;
-  background: #ffffff !important;
-}
-
-.mat-mdc-option {
-  background-color: #ffffff !important;
-  color: #1c1c1e !important;
-
-  .mdc-list-item__primary-text {
-    color: #1c1c1e !important;
-  }
-
-  &:hover, &.mat-mdc-option-active {
-    background-color: #f0f2f5 !important;
-  }
-}
-
-html:has(.dark-theme),
-body.dark-theme,
-.dark-theme {
-  background-color: #121214 !important;
-  color: #ffffff !important;
-
-  h2, h3, p, span, label, .mat-mdc-radio-button {
-    color: #f5f5f5 !important;
-  }
-
-  input[type="text"], input[type="email"], select {
-    background-color: #1e1e24 !important;
-    color: #ffffff !important;
-    border: 1px solid #29292e !important;
-  }
-
-  .mat-mdc-card {
-    background-color: #1e1e24 !important;
-    color: #ffffff !important;
-    border: 1px solid #29292e !important;
-  }
-
-  button[mat-flat-button],
-  .mat-mdc-flat-button {
-    background-color: #00c853 !important;
-    color: #ffffff !important;
-  }
-}
-
-html:has(.dark-theme) .cdk-overlay-pane .mat-mdc-select-panel,
-body.dark-theme ~ .cdk-overlay-container .mat-mdc-select-panel,
-body.dark-theme .cdk-overlay-container .mat-mdc-select-panel,
-.dark-theme .cdk-overlay-container .mat-mdc-select-panel,
-.cdk-overlay-container .dark-theme .mat-mdc-select-panel {
-  background-color: #1e1e24 !important;
-  background: #1e1e24 !important;
-}
-
-html:has(.dark-theme) .mat-mdc-option,
-body.dark-theme ~ .cdk-overlay-container .mat-mdc-option,
-body.dark-theme .cdk-overlay-container .mat-mdc-option,
-.dark-theme .cdk-overlay-container .mat-mdc-option {
-  background-color: #1e1e24 !important;
-  background: #1e1e24 !important;
-  color: #ffffff !important;
-
-  .mdc-list-item__primary-text {
-    color: #ffffff !important;
-  }
-
-  &:hover, &.mat-mdc-option-active {
-    background-color: #29292e !important;
-  }
-}
+@media (prefers-reduced-motion: reduce) { *, *::before, *::after { scroll-behavior: auto !important; transition-duration: .01ms !important; animation-duration: .01ms !important; } }

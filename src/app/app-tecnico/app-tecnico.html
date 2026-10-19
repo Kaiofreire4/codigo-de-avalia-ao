@@ -1,85 +1,57 @@
-<div class="dashboard-layout">
-
-
-  <mat-card class="tech-card table-card">
-    <mat-card-header class="card-header-spacer">
-      <mat-card-title class="panel-title">
-        <mat-icon color="primary">build</mat-icon> Technician Control Panel
-      </mat-card-title>
-      <mat-card-subtitle class="panel-subtitle">Select a ticket to support the customer</mat-card-subtitle>
-    </mat-card-header>
-
-    <mat-card-content>
-      <table mat-table [dataSource]="dataSource()" class="mat-elevation-z2 dynamic-table">
-
-        <ng-container matColumnDef="name">
-          <th mat-header-cell *matHeaderCellDef class="text-bold"> Client </th>
-          <td mat-cell *matCellDef="let element"> {{element.name}} </td>
-        </ng-container>
-
-        <ng-container matColumnDef="subject">
-          <th mat-header-cell *matHeaderCellDef class="text-bold"> Complaint </th>
-          <td mat-cell *matCellDef="let element"> {{element.subject}} </td>
-        </ng-container>
-
-        <ng-container matColumnDef="actions">
-          <th mat-header-cell *matHeaderCellDef class="text-bold"> Action </th>
-          <td mat-cell *matCellDef="let element">
-            <button mat-flat-button color="primary" (click)="selectTicket(element)">
-              Open Chat <mat-icon class="btn-icon-inside">chat</mat-icon>
-            </button>
-          </td>
-        </ng-container>
-
-        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-        <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
-      </table>
-    </mat-card-content>
-
-    <mat-card-actions class="table-actions">
-      <button mat-stroked-button routerLink="/register">
-        <mat-icon>arrow_back</mat-icon> Back to Registration
-      </button>
-    </mat-card-actions>
-  </mat-card>
-
-  <mat-card *ngIf="selectedTicket" class="tech-card chat-window">
-
-    <div class="chat-header-bar">
-      <div>
-        <h3 class="chat-title">Chatting with: {{ selectedTicket.name }} 💬</h3>
-        <p class="chat-subtitle">Issue: {{ selectedTicket.subject }}</p>
-      </div>
-      <mat-icon [matBadge]="unreadCount" matBadgeColor="warn" [matBadgeHidden]="unreadCount === 0">forum</mat-icon>
+<main class="workspace">
+  <section class="page-heading">
+    <div>
+      <span class="eyebrow">CENTRAL DE ATENDIMENTO</span>
+      <h1>Olá, Alex <span class="wave">✦</span></h1>
+      <p>Acompanhe os chamados e converse com seus clientes.</p>
     </div>
+    <a class="outline-action" routerLink="/register"><mat-icon>add</mat-icon> Abrir chamado</a>
+  </section>
 
-    <div class="messages-area">
+  <section class="stats-grid" aria-label="Resumo dos chamados">
+    <article class="stat-card"><span class="stat-icon purple"><mat-icon>inbox</mat-icon></span><div><span class="stat-label">Chamados abertos</span><strong>{{ openCount() }}</strong></div><span class="stat-note">Aguardando atendimento</span></article>
+    <article class="stat-card"><span class="stat-icon blue"><mat-icon>support_agent</mat-icon></span><div><span class="stat-label">Em andamento</span><strong>{{ progressCount() }}</strong></div><span class="stat-note">Com a equipe técnica</span></article>
+    <article class="stat-card"><span class="stat-icon green"><mat-icon>task_alt</mat-icon></span><div><span class="stat-label">Resolvidos</span><strong>{{ resolvedCount() }}</strong></div><span class="stat-note">Atendimentos concluídos</span></article>
+  </section>
 
-      <div *ngFor="let msg of chatMessages()" class="msg-box"
-           [ngClass]="{'technician-box': msg.sender === 'technician', 'client-box': msg.sender === 'client'}">
+  <section class="support-layout">
+    <article class="panel ticket-panel">
+      <div class="panel-heading">
+        <div><h2>Seus chamados</h2><p>{{ tickets().length }} solicitações no total</p></div>
+        <button class="icon-button" aria-label="Mais opções"><mat-icon>more_horiz</mat-icon></button>
+      </div>
+      <label class="search-box"><mat-icon>search</mat-icon><input [ngModel]="search()" (ngModelChange)="search.set($event)" placeholder="Buscar chamado..." aria-label="Buscar chamado"></label>
+      <div class="filter-tabs" aria-label="Filtrar chamados">
+        <button [class.active]="activeFilter() === 'all'" (click)="setFilter('all')">Todos <span>{{ tickets().length }}</span></button>
+        <button [class.active]="activeFilter() === 'open'" (click)="setFilter('open')">Abertos</button>
+        <button [class.active]="activeFilter() === 'in-progress'" (click)="setFilter('in-progress')">Em andamento</button>
+      </div>
+      <div class="ticket-list">
+        <button class="ticket-item" *ngFor="let ticket of filteredTickets(); trackBy: trackById" [class.selected]="selectedTicketId() === ticket.id" (click)="selectTicket(ticket)">
+          <span class="ticket-avatar" [class.avatar-blue]="ticket.status === 'in-progress'" [class.avatar-green]="ticket.status === 'resolved'">{{ ticket.name.charAt(0) }}</span>
+          <span class="ticket-copy"><span class="ticket-topline"><strong>{{ ticket.name }}</strong><time>{{ ticket.createdAt }}</time></span><span class="ticket-subject">{{ ticket.subject }}</span><span class="ticket-meta"><span class="status-dot" [ngClass]="ticket.status"></span>{{ statusLabel(ticket.status) }} <span class="ticket-number">· {{ ticket.id }}</span></span></span>
+          <mat-icon class="chevron">chevron_right</mat-icon>
+        </button>
+        <div class="empty-state" *ngIf="filteredTickets().length === 0"><mat-icon>search_off</mat-icon><strong>Nenhum chamado encontrado</strong><span>Tente outro termo ou filtro.</span></div>
+      </div>
+    </article>
 
-        <span class="user-label">
-          {{ msg.sender === 'technician' ? 'You (Technician)' : selectedTicket.name }}
-        </span>
-
-        <div class="bubble">
-          <p>{{ msg.text }}</p>
+    <article class="panel conversation-panel" *ngIf="selectedTicket() as ticket; else emptyConversation">
+      <header class="conversation-header">
+        <div class="contact-block"><span class="ticket-avatar avatar-blue">{{ ticket.name.charAt(0) }}</span><div><h2>{{ ticket.name }}</h2><p><span class="status-dot" [ngClass]="ticket.status"></span> {{ statusLabel(ticket.status) }} <span class="ticket-number">· {{ ticket.id }}</span></p></div></div>
+        <button class="resolve-button" (click)="resolveTicket()"><mat-icon>{{ ticket.status === 'resolved' ? 'replay' : 'check' }}</mat-icon>{{ ticket.status === 'resolved' ? 'Reabrir' : 'Resolver chamado' }}</button>
+      </header>
+      <div class="issue-banner"><span class="issue-icon"><mat-icon>confirmation_number</mat-icon></span><div><span>ASSUNTO DO CHAMADO</span><strong>{{ ticket.subject }}</strong></div><button class="icon-button" aria-label="Detalhes do chamado"><mat-icon>open_in_new</mat-icon></button></div>
+      <div class="messages-area" aria-live="polite">
+        <div class="date-divider"><span>CONVERSA DO CHAMADO</span></div>
+        <div *ngFor="let msg of ticket.messages" class="message-row" [class.own-message]="msg.sender === 'technician'">
+          <span class="message-avatar" [class.own-avatar]="msg.sender === 'technician'">{{ msg.sender === 'technician' ? 'A' : ticket.name.charAt(0) }}</span>
+          <div class="message-content"><span class="message-author">{{ msg.sender === 'technician' ? 'Você · Suporte técnico' : ticket.name }} <time>{{ msg.time }}</time></span><div class="message-bubble">{{ msg.text }}</div></div>
         </div>
       </div>
-    </div>
-
-
-    <div class="input-container-bar">
-      <mat-form-field appearance="outline" class="chat-input-field">
-        <mat-label>Type your support solution...</mat-label>
-        <input matInput #replyInput (keyup.enter)="sendReply(replyInput.value); replyInput.value = ''">
-      </mat-form-field>
-
-      <button mat-mini-fab color="primary" class="btn-send-spacing" (click)="sendReply(replyInput.value); replyInput.value = ''">
-        <mat-icon>send</mat-icon>
-      </button>
-    </div>
-
-  </mat-card>
-
-</div>
+      <form class="composer" (ngSubmit)="sendReply()"><input name="reply" [(ngModel)]="reply" placeholder="Escreva uma mensagem..." aria-label="Mensagem para o cliente"><button type="button" class="attach-button" aria-label="Anexar arquivo"><mat-icon>attach_file</mat-icon></button><button class="send-button" type="submit" aria-label="Enviar mensagem" [disabled]="!reply.trim()"><mat-icon>arrow_upward</mat-icon></button></form>
+      <p class="secure-note"><mat-icon>lock</mat-icon> As mensagens são visíveis para o cliente deste chamado</p>
+    </article>
+    <ng-template #emptyConversation><article class="panel conversation-panel empty-conversation"><mat-icon>forum</mat-icon><h2>Escolha um chamado</h2><p>Selecione uma solicitação na lista para ver a conversa.</p></article></ng-template>
+  </section>
+</main>

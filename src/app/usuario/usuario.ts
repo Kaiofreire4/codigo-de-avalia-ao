@@ -1,37 +1,34 @@
-import { Component, inject } from '@angular/core';
-import { RouterLink } from '@angular/router';
-import { MatTableModule } from '@angular/material/table';
-import { MatFormFieldModule } from '@angular/material/form-field';
-import { MatInputModule } from '@angular/material/input';
-import { MatIconModule } from '@angular/material/icon';
+import { Component, computed, inject, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { UserService } from '../user.service';
+import { RouterLink } from '@angular/router';
+import { FormsModule } from '@angular/forms';
+import { MatIconModule } from '@angular/material/icon';
+import { UserService, Ticket, TicketStatus } from '../user.service';
 
 @Component({
   selector: 'app-usuarios',
   standalone: true,
-  imports: [
-    RouterLink,
-    MatTableModule,
-    MatFormFieldModule,
-    MatInputModule,
-    MatIconModule,
-    CommonModule
-  ],
+  imports: [CommonModule, RouterLink, FormsModule, MatIconModule],
   templateUrl: './usuario.html',
   styleUrls: ['./usuario.scss', '../app-tecnico/app-tecnico.scss']
 })
 export class AppUsuarios {
   private userService = inject(UserService);
+  tickets = this.userService.getTickets();
+  selectedTicketId = signal<string | null>(this.tickets()[0]?.id ?? null);
+  reply = '';
+  selectedTicket = computed(() => this.tickets().find(ticket => ticket.id === this.selectedTicketId()) ?? null);
+  openCount = computed(() => this.tickets().filter(ticket => ticket.status !== 'resolved').length);
 
-  displayedColumns: string[] = ['name', 'email', 'subject'];
-  dataSource = this.userService.getTickets();
-
-
-  chatMessages = this.userService.getChatMessages();
-
-  sendReply(message: string) {
-    if (!message.trim()) return;
-    this.userService.sendMessage('client', message);
+  selectTicket(ticket: Ticket) { this.selectedTicketId.set(ticket.id); }
+  statusLabel(status: TicketStatus) {
+    return status === 'open' ? 'Aguardando atendimento' : status === 'in-progress' ? 'Em andamento' : 'Resolvido';
   }
+  sendReply() {
+    const ticket = this.selectedTicket();
+    if (!ticket || !this.reply.trim()) return;
+    this.userService.sendMessage(ticket.id, 'client', this.reply);
+    this.reply = '';
+  }
+  trackById(_index: number, ticket: Ticket) { return ticket.id; }
 }

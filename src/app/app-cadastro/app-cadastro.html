@@ -1,51 +1,16 @@
-<div class="register-wrapper">
-
-  <mat-card class="register-card">
-    <mat-card-header class="register-header">
-      <mat-card-title class="register-title">
-        <mat-icon color="primary">build</mat-icon> Call the technician
-      </mat-card-title>
-      <mat-card-subtitle class="register-subtitle">
-        Fill in the details below to open a support ticket
-      </mat-card-subtitle>
-    </mat-card-header>
-
-    <mat-card-content class="register-content">
-
-      <mat-form-field appearance="outline" class="full-width">
-        <mat-label>Name</mat-label>
-        <input matInput [(ngModel)]="name" placeholder="Your name">
-        <mat-icon matSuffix>person</mat-icon>
-      </mat-form-field>
-
-      <mat-form-field appearance="outline" class="full-width">
-        <mat-label>Email</mat-label>
-        <input matInput type="email" [(ngModel)]="email" placeholder="your@email.com">
-        <mat-icon matSuffix>email</mat-icon>
-      </mat-form-field>
-
-
-      <mat-form-field appearance="outline" class="full-width">
-        <mat-label>Complaints</mat-label>
-        <mat-select [(ngModel)]="subject">
-          <mat-option value="broken coffee machine">Broken coffee machine ☕</mat-option>
-          <mat-option value="slow internet">Slow internet 🌐</mat-option>
-          <mat-option value="computer won't turn on">Computer won't turn on 💻</mat-option>
-          <mat-option value="other">Other issue...</mat-option>
-        </mat-select>
-      </mat-form-field>
-
-      <button mat-flat-button color="primary" class="btn-submit-ticket" (click)="sendComplaint()">
-        Submit Ticket 🚀
-      </button>
-
-    </mat-card-content>
-
-    <mat-card-actions class="register-actions">
-      <button mat-button routerLink="/users" class="btn-link-view">
-        See the complaints. →
-      </button>
-    </mat-card-actions>
-  </mat-card>
-
-</div>
+<main class="register-wrapper">
+  <form class="register-card" (ngSubmit)="sendComplaint()">
+    <a class="back-link" routerLink="/users"><mat-icon>arrow_back</mat-icon> Voltar para meus chamados</a>
+    <span class="auth-mark"><mat-icon>handyman</mat-icon></span>
+    <span class="auth-eyebrow">ESTAMOS AQUI PARA AJUDAR</span>
+    <h1>Abra um chamado</h1>
+    <p class="register-subtitle">Conte o que está acontecendo. Um técnico vai acompanhar sua solicitação.</p>
+    <div class="input-group"><label for="name">Seu nome</label><input id="name" name="name" [(ngModel)]="name" placeholder="Nome completo" autocomplete="name" required></div>
+    <div class="input-group"><label for="email">E-mail para contato</label><input id="email" name="email" type="email" [(ngModel)]="email" placeholder="voce@exemplo.com" autocomplete="email" required></div>
+    <div class="input-group"><label for="subject">Qual é o problema?</label><input id="subject" name="subject" [(ngModel)]="subject" placeholder="Ex.: Computador não liga" required></div>
+    <div class="input-group"><label for="description">Descreva com mais detalhes</label><textarea id="description" name="description" [(ngModel)]="description" placeholder="O que aconteceu? Quando começou?" rows="4" required></textarea></div>
+    <p class="form-error" *ngIf="errorMessage" role="alert">{{ errorMessage }}</p>
+    <button class="btn-submit-ticket" type="submit"><mat-icon>send</mat-icon> Enviar solicitação</button>
+    <p class="privacy-note"><mat-icon>lock</mat-icon> Seus dados são usados apenas para este atendimento.</p>
+  </form>
+</main>

@@ -1,53 +1,53 @@
-import { Component, inject } from '@angular/core';
+import { Component, computed, inject, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterLink } from '@angular/router';
-import { MatCardModule } from '@angular/material/card';
-import { MatTableModule } from '@angular/material/table';
+import { FormsModule } from '@angular/forms';
 import { MatIconModule } from '@angular/material/icon';
-import { MatFormFieldModule } from '@angular/material/form-field';
-import { MatInputModule } from '@angular/material/input';
-import { MatButtonModule } from '@angular/material/button';
-import { MatBadgeModule } from '@angular/material/badge';
-import { UserService } from '../user.service';
+import { UserService, Ticket, TicketStatus } from '../user.service';
 
 @Component({
   selector: 'app-tecnico',
   standalone: true,
-  imports: [
-    CommonModule,
-    RouterLink,
-    MatCardModule,
-    MatTableModule,
-    MatIconModule,
-    MatFormFieldModule,
-    MatInputModule,
-    MatButtonModule,
-    MatBadgeModule
-  ],
+  imports: [CommonModule, RouterLink, FormsModule, MatIconModule],
   templateUrl: './app-tecnico.html',
-  styleUrls: ['./app-tecnico.scss']
+  styleUrl: './app-tecnico.scss'
 })
 export class AppTecnicoComponent {
   private userService = inject(UserService);
+  tickets = this.userService.getTickets();
+  search = signal('');
+  activeFilter = signal<'all' | TicketStatus>('all');
+  selectedTicketId = signal<string | null>(this.tickets()[0]?.id ?? null);
+  reply = '';
 
-  displayedColumns: string[] = ['name', 'subject', 'actions'];
-  dataSource = this.userService.getTickets();
+  selectedTicket = computed(() => this.tickets().find(ticket => ticket.id === this.selectedTicketId()) ?? null);
+  filteredTickets = computed(() => {
+    const query = this.search().trim().toLocaleLowerCase('pt-BR');
+    return this.tickets().filter(ticket => {
+      const matchesFilter = this.activeFilter() === 'all' || ticket.status === this.activeFilter();
+      const matchesQuery = !query || `${ticket.id} ${ticket.name} ${ticket.subject}`.toLocaleLowerCase('pt-BR').includes(query);
+      return matchesFilter && matchesQuery;
+    });
+  });
+  openCount = computed(() => this.tickets().filter(ticket => ticket.status === 'open').length);
+  progressCount = computed(() => this.tickets().filter(ticket => ticket.status === 'in-progress').length);
+  resolvedCount = computed(() => this.tickets().filter(ticket => ticket.status === 'resolved').length);
 
-  chatMessages = this.userService.getChatMessages();
-
-  selectedTicket: any = null;
-  unreadCount = 0;
-
-
-  selectTicket(ticket: any) {
-    this.selectedTicket = ticket;
-    this.unreadCount = 0;
+  selectTicket(ticket: Ticket) { this.selectedTicketId.set(ticket.id); }
+  setFilter(filter: 'all' | TicketStatus) { this.activeFilter.set(filter); }
+  statusLabel(status: TicketStatus) {
+    return status === 'open' ? 'Aberto' : status === 'in-progress' ? 'Em andamento' : 'Resolvido';
   }
-
-  sendReply(message: string) {
-    if (!message.trim()) return;
-
-
-    this.userService.sendMessage('technician', message);
+  sendReply() {
+    const ticket = this.selectedTicket();
+    if (!ticket || !this.reply.trim()) return;
+    this.userService.sendMessage(ticket.id, 'technician', this.reply);
+    this.reply = '';
+    if (ticket.status === 'open') this.userService.updateTicketStatus(ticket.id, 'in-progress');
   }
+  resolveTicket() {
+    const ticket = this.selectedTicket();
+    if (ticket) this.userService.updateTicketStatus(ticket.id, ticket.status === 'resolved' ? 'in-progress' : 'resolved');
+  }
+  trackById(_index: number, ticket: Ticket) { return ticket.id; }
 }

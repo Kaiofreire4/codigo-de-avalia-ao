@@ -1,73 +1,33 @@
-<div class="dashboard-layout">
-
-
-  <div class="table-container tech-card table-card" style="padding: 24px;">
-    <h3>Registered Complaints 📋</h3>
-
-    <table mat-table [dataSource]="dataSource()" class="mat-elevation-z1 user-table dynamic-table">
-      <ng-container matColumnDef="name">
-        <th mat-header-cell *matHeaderCellDef> Name </th>
-        <td mat-cell *matCellDef="let element"> {{element.name}} </td>
-      </ng-container>
-
-      <ng-container matColumnDef="email">
-        <th mat-header-cell *matHeaderCellDef> Email </th>
-        <td mat-cell *matCellDef="let element"> {{element.email}} </td>
-      </ng-container>
-
-      <ng-container matColumnDef="subject">
-        <th mat-header-cell *matHeaderCellDef> Complaint </th>
-        <td mat-cell *matCellDef="let element"> {{element.subject}} </td>
-      </ng-container>
-
-      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-      <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
-    </table>
-
-    <br><br>
-    <div style="display: flex; gap: 12px;">
-      <button mat-stroked-button routerLink="/register" class="btn-nav">← Complain again</button>
-      <button mat-flat-button color="primary" routerLink="/login" class="btn-nav">Go to Tech Panel 🛠️ →</button>
-    </div>
-  </div>
-
-
-  <div class="tech-card chat-window" *ngIf="dataSource().length > 0">
-
-    <div class="chat-header-bar">
-      <div>
-        <h3 class="chat-title">Support Chat 💬</h3>
-        <p class="chat-subtitle">Connected with IT Support Technician</p>
+<main class="workspace client-workspace">
+  <section class="page-heading">
+    <div><span class="eyebrow">ÁREA DO CLIENTE</span><h1>Meus chamados <span class="wave">✦</span></h1><p>Acompanhe suas solicitações e fale com nosso time técnico.</p></div>
+    <a class="outline-action" routerLink="/register"><mat-icon>add</mat-icon> Novo chamado</a>
+  </section>
+  <section class="client-summary"><span class="summary-icon"><mat-icon>support_agent</mat-icon></span><div><strong>{{ openCount() }} {{ openCount() === 1 ? 'chamado em aberto' : 'chamados em aberto' }}</strong><p>Nossa equipe está aqui para ajudar você.</p></div><span class="summary-decoration">24/7</span></section>
+  <section class="support-layout">
+    <article class="panel ticket-panel">
+      <div class="panel-heading"><div><h2>Suas solicitações</h2><p>{{ tickets().length }} chamados registrados</p></div></div>
+      <div class="ticket-list">
+        <button class="ticket-item" *ngFor="let ticket of tickets(); trackBy: trackById" [class.selected]="selectedTicketId() === ticket.id" (click)="selectTicket(ticket)">
+          <span class="ticket-avatar" [class.avatar-blue]="ticket.status === 'in-progress'" [class.avatar-green]="ticket.status === 'resolved'"><mat-icon>confirmation_number</mat-icon></span>
+          <span class="ticket-copy"><span class="ticket-topline"><strong>{{ ticket.subject }}</strong><time>{{ ticket.createdAt }}</time></span><span class="ticket-subject">{{ ticket.id }}</span><span class="ticket-meta"><span class="status-dot" [ngClass]="ticket.status"></span>{{ statusLabel(ticket.status) }}</span></span>
+          <mat-icon class="chevron">chevron_right</mat-icon>
+        </button>
+        <div class="empty-state" *ngIf="tickets().length === 0"><mat-icon>inbox</mat-icon><strong>Você ainda não tem chamados</strong><span>Abra uma solicitação e nossa equipe vai ajudar.</span><a routerLink="/register">Criar chamado</a></div>
       </div>
-    </div>
-
-    <div class="messages-area">
-
-      <div *ngFor="let msg of chatMessages()" class="msg-box"
-           [ngClass]="{'technician-box': msg.sender === 'client', 'client-box': msg.sender === 'technician'}">
-
-        <span class="user-label">
-          {{ msg.sender === 'client' ? 'You' : 'Support Technician' }}
-        </span>
-
-        <div class="bubble">
-          <p>{{ msg.text }}</p>
+    </article>
+    <article class="panel conversation-panel" *ngIf="selectedTicket() as ticket; else emptyConversation">
+      <header class="conversation-header"><div class="contact-block"><span class="ticket-avatar avatar-blue"><mat-icon>support_agent</mat-icon></span><div><h2>Equipe de suporte</h2><p><span class="status-dot" [ngClass]="ticket.status"></span> {{ statusLabel(ticket.status) }} <span class="ticket-number">· {{ ticket.id }}</span></p></div></div><button class="icon-button" aria-label="Informações do chamado"><mat-icon>info</mat-icon></button></header>
+      <div class="issue-banner"><span class="issue-icon"><mat-icon>confirmation_number</mat-icon></span><div><span>SEU CHAMADO</span><strong>{{ ticket.subject }}</strong></div></div>
+      <div class="messages-area" aria-live="polite"><div class="date-divider"><span>CONVERSA DO CHAMADO</span></div>
+        <div *ngFor="let msg of ticket.messages" class="message-row" [class.own-message]="msg.sender === 'client'">
+          <span class="message-avatar" [class.own-avatar]="msg.sender === 'client'">{{ msg.sender === 'client' ? ticket.name.charAt(0) : 'S' }}</span>
+          <div class="message-content"><span class="message-author">{{ msg.sender === 'client' ? 'Você' : 'Suporte técnico' }} <time>{{ msg.time }}</time></span><div class="message-bubble">{{ msg.text }}</div></div>
         </div>
       </div>
-    </div>
-
-
-    <div class="input-container-bar">
-      <mat-form-field appearance="outline" class="chat-input-field">
-        <mat-label>Type your reply to the technician...</mat-label>
-        <input matInput #clientReplyInput (keyup.enter)="sendReply(clientReplyInput.value); clientReplyInput.value = ''">
-      </mat-form-field>
-
-      <button mat-mini-fab color="primary" (click)="sendReply(clientReplyInput.value); clientReplyInput.value = ''">
-        <mat-icon>send</mat-icon>
-      </button>
-    </div>
-
-  </div>
-
-</div>
+      <form class="composer" (ngSubmit)="sendReply()"><input name="reply" [(ngModel)]="reply" placeholder="Escreva uma mensagem para o suporte..." aria-label="Mensagem para o suporte"><button class="send-button" type="submit" aria-label="Enviar mensagem" [disabled]="!reply.trim()"><mat-icon>arrow_upward</mat-icon></button></form>
+      <p class="secure-note"><mat-icon>lock</mat-icon> Sua conversa é privada e vinculada a este chamado</p>
+    </article>
+    <ng-template #emptyConversation><article class="panel conversation-panel empty-conversation"><mat-icon>forum</mat-icon><h2>Seu suporte começa aqui</h2><p>Abra um chamado para conversar com nossa equipe.</p><a class="outline-action" routerLink="/register">Abrir chamado</a></article></ng-template>
+  </section>
+</main>

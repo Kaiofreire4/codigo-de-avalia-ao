@@ -1,11 +1,13 @@
 import { Component, inject } from '@angular/core';
 import { Router, RouterLink } from '@angular/router';
 import { FormsModule } from '@angular/forms';
+import { CommonModule } from '@angular/common';
+import { MatIconModule } from '@angular/material/icon';
 import { UserService } from '../user.service';
 @Component({
   selector: 'app-app-login',
   standalone: true,
-  imports: [FormsModule, RouterLink],
+  imports: [FormsModule, RouterLink, CommonModule, MatIconModule],
   templateUrl: './app-login.html',
   styleUrl: './app-login.scss'
 })
@@ -15,29 +17,29 @@ export class AppLoginComponent {
 
   email = '';
   password = '';
+  errorMessage = '';
 
   login() {
-    if (!this.email || !this.password) {
-      alert('Please fill in all fields!');
+    this.errorMessage = '';
+    if (!this.email.trim() || !this.password) {
+      this.errorMessage = 'Preencha seu e-mail e sua senha para continuar.';
       return;
     }
 
     const accounts = this.userService.getAccounts()();
 
     const foundAccount = accounts.find(
-      acc => acc.email === this.email && acc.password === this.password
+      acc => acc.email.toLowerCase() === this.email.trim().toLowerCase() && acc.password === this.password
     );
 
     if (foundAccount) {
-      alert(`Login successful! Welcome back, ${foundAccount.name}.`);
-
       if (foundAccount.role === 'technician') {
         this.router.navigate(['/technician']);
       } else {
-        this.router.navigate(['/register']);
+        this.router.navigate(['/users']);
       }
     } else {
-      alert('Invalid email or password. Access denied.');
+      this.errorMessage = 'E-mail ou senha incorretos. Confira os dados e tente novamente.';
     }
   }
 }

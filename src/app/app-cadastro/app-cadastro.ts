@@ -1,6 +1,7 @@
 import { Component, inject } from '@angular/core';
 import { Router, RouterLink } from '@angular/router';
 import { FormsModule } from '@angular/forms';
+import { CommonModule } from '@angular/common';
 import { UserService } from '../user.service';
 
 import { MatCardModule } from '@angular/material/card';
@@ -14,6 +15,7 @@ import { MatIconModule } from '@angular/material/icon';
   selector: 'app-app-cadastro',
   standalone: true,
   imports: [
+    CommonModule,
     FormsModule,
     RouterLink,
     MatCardModule,
@@ -33,21 +35,23 @@ export class AppCadastro {
   name = '';
   email = '';
   subject = '';
+  description = '';
+  errorMessage = '';
 
   sendComplaint() {
-    if (!this.name || !this.email || !this.subject) {
-      alert('Please fill in all fields!');
+    this.errorMessage = '';
+    if (!this.name.trim() || !this.email.trim() || !this.subject.trim() || !this.description.trim()) {
+      this.errorMessage = 'Preencha todos os campos para abrir o chamado.';
       return;
     }
 
     this.userService.addTicket({
-      name: this.name,
-      email: this.email,
-      subject: this.subject,
-      status: 'open'
+      name: this.name.trim(),
+      email: this.email.trim(),
+      subject: this.subject.trim(),
+      description: this.description.trim()
     });
 
-    alert('Complaint registered successfully!');
     this.router.navigate(['/users']);
   }
 }
